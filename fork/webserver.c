@@ -17,14 +17,6 @@
 
 int status;
 
-void SigCLD_Handler(int Signo) {
-  while(waitpid((pid_t) (-1), &status, WNOHANG) > 0) {}
-}
-
-void SigPIPE_Handler(int Signo) {
-  printf("Broken PIPE : %d\n",Signo);
-}
-
 /*檔案格式*/
 struct data{
   char *ext;
@@ -171,10 +163,6 @@ int main(int argc, char *argv[])
     perror("listen");
     exit(1);
   }
-
-  /*Registed signal*/
-  signal(SIGCLD,SigCLD_Handler);
-  signal(SIGPIPE,SigPIPE_Handler);
 
   while (1) {
     client_fd = accept(sd, (struct sockaddr *) &cli_addr, &sin_len);
